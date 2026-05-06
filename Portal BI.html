@@ -6,19 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portal de BI - Logística</title>
 
-  <!-- Favicon SVG Embutido -->
   <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E6CB00' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' /%3E%3C/svg%3E">
 
-  <!-- Importando a fonte M PLUS 1 do Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Configuração do Tailwind para usar a cor e a fonte customizadas -->
   <script>
     tailwind.config = {
       theme: {
@@ -44,9 +40,6 @@
 
 <body class="bg-slate-50 min-h-screen text-gray-800 overflow-hidden">
 
-  <!-- ========================================== -->
-  <!-- TELA 1: LOGIN                              -->
-  <!-- ========================================== -->
   <div id="login-screen"
     class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
     <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 sm:p-10">
@@ -67,16 +60,16 @@
         class="hidden bg-red-50 text-red-700 p-4 rounded-xl text-sm font-medium text-center border border-red-200 mb-6">
       </div>
 
-      <form id="login-form" class="space-y-6">
+      <form id="login-form" class="space-y-6" action="#" method="POST">
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">E-mail</label>
-          <input type="email" id="email" required
+          <input type="email" id="email" name="username" required autocomplete="username"
             class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-gold focus:border-brand-gold transition-all outline-none bg-gray-50"
             placeholder="usuario@empresa.com.br">
         </div>
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">Senha</label>
-          <input type="password" id="password" required
+          <input type="password" id="password" name="password" required autocomplete="current-password"
             class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-gold focus:border-brand-gold transition-all outline-none bg-gray-50"
             placeholder="••••••••">
         </div>
@@ -88,11 +81,7 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- TELA 2: PAINEL POWER BI                    -->
-  <!-- ========================================== -->
   <div id="dashboard-screen" class="hidden h-screen flex-col">
-    <!-- Header Fixo e Moderno (Cores Atualizadas) -->
     <header class="w-full h-[72px] bg-gray-800 px-6 flex justify-between items-center z-10 shadow-sm">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 bg-brand-gold rounded-lg flex items-center justify-center text-slate-900 shadow-sm">
@@ -107,7 +96,6 @@
       </div>
 
       <div class="flex items-center gap-4">
-
         <button id="logout-btn"
           class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-red-500 bg-gray-700 hover:bg-gray-600 rounded-lg transition-all">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -119,7 +107,6 @@
       </div>
     </header>
 
-    <!-- Área do Iframe ocupando o restante da tela -->
     <main class="flex-1 dashboard-container bg-slate-100 relative">
       <div id="loading-overlay" class="absolute inset-0 bg-slate-100 flex flex-col items-center justify-center z-20">
         <div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mb-4"></div>
@@ -130,18 +117,13 @@
     </main>
   </div>
 
-  <!-- ========================================== -->
-  <!-- SCRIPTS: Lógica do Supabase                -->
-  <!-- ========================================== -->
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-    // Credenciais
     const supabaseUrl = 'https://jkpjqsmvwbqfrmsejyyz.supabase.co';
     const supabaseKey = 'sb_publishable_vX7-cRhfds96bdeZop6P_Q_PfZKvEhp';
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Mapeando os elementos
     const loginScreen = document.getElementById('login-screen');
     const dashboardScreen = document.getElementById('dashboard-screen');
     const loginForm = document.getElementById('login-form');
@@ -149,12 +131,11 @@
     const passwordInput = document.getElementById('password');
     const errorMessage = document.getElementById('error-message');
     const submitBtn = document.getElementById('submit-btn');
-    const userEmailText = document.getElementById('user-email');
     const logoutBtn = document.getElementById('logout-btn');
     const powerbiIframe = document.getElementById('powerbi-iframe');
     const loadingOverlay = document.getElementById('loading-overlay');
 
-    async function loadSecureDashboard(user) {
+    async function loadSecureDashboard() {
       loadingOverlay.classList.remove('hidden');
 
       const { data, error } = await supabase
@@ -164,7 +145,7 @@
         .single();
 
       if (error || !data) {
-        errorMessage.textContent = 'Erro ao buscar URL do painel. Verifique as permissões.';
+        errorMessage.textContent = 'Erro ao buscar URL do painel.';
         errorMessage.classList.remove('hidden');
         await supabase.auth.signOut();
         showLogin();
@@ -180,7 +161,6 @@
       loginScreen.classList.add('hidden');
       dashboardScreen.classList.remove('hidden');
       dashboardScreen.classList.add('flex');
-      userEmailText.textContent = user.email;
     }
 
     function showLogin() {
@@ -189,10 +169,10 @@
       loginScreen.classList.remove('hidden');
       loginScreen.classList.add('flex');
       errorMessage.classList.add('hidden');
+
       passwordInput.value = '';
       powerbiIframe.src = '';
 
-      // Reseta o estado do botão para garantir que não fique "preso"
       submitBtn.textContent = 'Acessar Painel';
       submitBtn.disabled = false;
     }
@@ -200,7 +180,7 @@
     async function checkSession() {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        await loadSecureDashboard(session.user);
+        await loadSecureDashboard();
       }
     }
     checkSession();
@@ -223,7 +203,7 @@
         submitBtn.textContent = 'Acessar Painel';
         submitBtn.disabled = false;
       } else {
-        await loadSecureDashboard(data.user);
+        await loadSecureDashboard();
         submitBtn.disabled = false;
         submitBtn.textContent = 'Acessar Painel';
       }
