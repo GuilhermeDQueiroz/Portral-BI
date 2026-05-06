@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de BI - Logística</title>
+
+  <!-- Importando a fonte M PLUS 1 do Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+1:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Configuração do Tailwind para usar a cor e a fonte customizadas -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'brand-gold': '#FFE100',
+            'brand-dark-gold': '#E6CB00',
+          },
+          fontFamily: {
+            /* Criando a classe font-mplus */
+            'mplus': ['"M PLUS 1"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .dashboard-container {
+      height: calc(100vh - 72px);
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 min-h-screen text-gray-800 overflow-hidden">
+
+  <!-- ========================================== -->
+  <!-- TELA 1: LOGIN                              -->
+  <!-- ========================================== -->
+  <div id="login-screen"
+    class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4">
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 sm:p-10">
+
+      <div class="text-center mb-8">
+        <div
+          class="w-16 h-16 bg-brand-gold text-slate-900 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+        </div>
+        <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Portal de BI</h2>
+        <p class="text-sm text-gray-500 mt-2 font-medium">Seja bem-vindo</p>
+      </div>
+
+      <div id="error-message"
+        class="hidden bg-red-50 text-red-700 p-4 rounded-xl text-sm font-medium text-center border border-red-200 mb-6">
+      </div>
+
+      <form id="login-form" class="space-y-6">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">E-mail</label>
+          <input type="email" id="email" required
+            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-gold focus:border-brand-gold transition-all outline-none bg-gray-50"
+            placeholder="usuario@empresa.com.br">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Senha</label>
+          <input type="password" id="password" required
+            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-gold focus:border-brand-gold transition-all outline-none bg-gray-50"
+            placeholder="••••••••">
+        </div>
+        <button type="submit" id="submit-btn"
+          class="w-full bg-brand-gold hover:bg-brand-dark-gold text-slate-900 font-bold py-3 px-4 rounded-xl shadow-md transition-all hover:shadow-lg active:scale-[0.98]">
+          Acessar Painel
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TELA 2: PAINEL POWER BI                    -->
+  <!-- ========================================== -->
+  <div id="dashboard-screen" class="hidden h-screen flex-col">
+    <!-- Header Fixo e Moderno -->
+    <header
+      class="w-full h-[72px] bg-white border-b border-slate-200 px-6 flex justify-between items-center z-10 shadow-sm">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-brand-gold rounded-lg flex items-center justify-center text-slate-900 shadow-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <div>
+          <!-- Aqui aplicamos a classe font-mplus no H1 -->
+          <h1 class="text-lg font-bold text-slate-800 leading-tight font-mplus">Dashboard - Controle Logístico</h1>
+
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4">
+
+        <button id="logout-btn"
+          class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Sair
+        </button>
+      </div>
+    </header>
+
+    <!-- Área do Iframe ocupando o restante da tela -->
+    <main class="flex-1 dashboard-container bg-slate-100 relative">
+      <div id="loading-overlay" class="absolute inset-0 bg-slate-100 flex flex-col items-center justify-center z-20">
+        <div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p class="text-slate-600 font-medium">Carregando painel de dados...</p>
+      </div>
+      <iframe id="powerbi-iframe" title="Logística 2.0" class="w-full h-full border-none"
+        allowFullScreen="true"></iframe>
+    </main>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- SCRIPTS: Lógica do Supabase                -->
+  <!-- ========================================== -->
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    // Credenciais
+    const supabaseUrl = 'https://jkpjqsmvwbqfrmsejyyz.supabase.co';
+    const supabaseKey = 'sb_publishable_vX7-cRhfds96bdeZop6P_Q_PfZKvEhp';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Mapeando os elementos
+    const loginScreen = document.getElementById('login-screen');
+    const dashboardScreen = document.getElementById('dashboard-screen');
+    const loginForm = document.getElementById('login-form');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const errorMessage = document.getElementById('error-message');
+    const submitBtn = document.getElementById('submit-btn');
+    const userEmailText = document.getElementById('user-email');
+    const logoutBtn = document.getElementById('logout-btn');
+    const powerbiIframe = document.getElementById('powerbi-iframe');
+    const loadingOverlay = document.getElementById('loading-overlay');
+
+    async function loadSecureDashboard(user) {
+      loadingOverlay.classList.remove('hidden');
+
+      const { data, error } = await supabase
+        .from('configuracoes')
+        .select('powerbi_url')
+        .limit(1)
+        .single();
+
+      if (error || !data) {
+        errorMessage.textContent = 'Erro ao buscar URL do painel. Verifique as permissões.';
+        errorMessage.classList.remove('hidden');
+        await supabase.auth.signOut();
+        showLogin();
+        return;
+      }
+
+      powerbiIframe.src = data.powerbi_url;
+
+      powerbiIframe.onload = () => {
+        loadingOverlay.classList.add('hidden');
+      };
+
+      loginScreen.classList.add('hidden');
+      dashboardScreen.classList.remove('hidden');
+      dashboardScreen.classList.add('flex');
+      userEmailText.textContent = user.email;
+    }
+
+    function showLogin() {
+      dashboardScreen.classList.add('hidden');
+      dashboardScreen.classList.remove('flex');
+      loginScreen.classList.remove('hidden');
+      loginScreen.classList.add('flex');
+      errorMessage.classList.add('hidden');
+      passwordInput.value = '';
+      powerbiIframe.src = '';
+    }
+
+    async function checkSession() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        await loadSecureDashboard(session.user);
+      }
+    }
+    checkSession();
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      submitBtn.textContent = 'Autenticando...';
+      submitBtn.disabled = true;
+      errorMessage.classList.add('hidden');
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: emailInput.value,
+        password: passwordInput.value,
+      });
+
+      if (error) {
+        errorMessage.textContent = 'Usuário ou senha incorretos.';
+        errorMessage.classList.remove('hidden');
+        submitBtn.textContent = 'Acessar Painel';
+        submitBtn.disabled = false;
+      } else {
+        await loadSecureDashboard(data.user);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Acessar Painel';
+      }
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      showLogin();
+    });
+  </script>
+
+</body>
+
+</html>
